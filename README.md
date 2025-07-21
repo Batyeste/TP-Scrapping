@@ -154,4 +154,4 @@ TP-Scrapping/
 └── requirements.txt        # Dépendances
 ```
 
-### README en partie créé par IA. Claude 4 =)
+### TP réalisé en mode Vibes Coding !
