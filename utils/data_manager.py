@@ -8,12 +8,19 @@ class DataManager:
     def __init__(self, data_dir="data"):
         self.data_dir = data_dir
         self.articles_file = os.path.join(data_dir, "articles.json")
+        # Chemin pour le frontend React
+        self.frontend_dir = "frontend/public"
+        self.frontend_articles_file = os.path.join(self.frontend_dir, "articles.json")
         self._ensure_data_dir()
     
     def _ensure_data_dir(self):
-        """Crée le dossier data s'il n'existe pas"""
+        """Crée les dossiers data et frontend/public s'ils n'existent pas"""
         if not os.path.exists(self.data_dir):
             os.makedirs(self.data_dir)
+        
+        # Créer le dossier frontend/public s'il n'existe pas
+        if not os.path.exists(self.frontend_dir):
+            os.makedirs(self.frontend_dir)
     
     def save_articles(self, articles: List[Dict]):
         """
@@ -41,8 +48,17 @@ class DataManager:
         # Convertir en liste et sauvegarder
         all_articles = list(articles_dict.values())
         
+        # Sauvegarder dans le dossier data principal
         with open(self.articles_file, 'w', encoding='utf-8') as f:
             json.dump(all_articles, f, ensure_ascii=False, indent=2)
+        
+        # Sauvegarder aussi dans frontend/public pour React
+        try:
+            with open(self.frontend_articles_file, 'w', encoding='utf-8') as f:
+                json.dump(all_articles, f, ensure_ascii=False, indent=2)
+            print(f"Articles également sauvegardés pour le frontend: {self.frontend_articles_file}")
+        except Exception as e:
+            print(f"Attention: impossible de sauvegarder dans frontend/public: {e}")
         
         print(f"Sauvegarde terminée. {new_count} nouveaux articles ajoutés.")
         print(f"Total d'articles dans la base: {len(all_articles)}")
